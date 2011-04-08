@@ -1,0 +1,6 @@
+name = "OL Migrate"
+description = ""
+package = "OL"
+core = 7.x
+dependencies[] = migrate
+files[] = ol_migrate.module

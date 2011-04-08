@@ -1,0 +1,142 @@
+<?php
+
+function ol_migrate_migrate_api() {
+  $api = array(
+    'api' => 2,
+  );
+  return $api;
+}
+
+
+
+class OLArticleMigration extends Migration {
+  public function __construct() {
+        
+    parent::__construct();
+  
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/article.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->destination = new MigrateDestinationNode('article');
+ 
+    $this->map = new MigrateSQLMap($this->machineName,
+        array(
+          'id' => array('type' => 'int',
+                        'unsigned' => TRUE,
+                        'not null' => TRUE,
+                        )
+        ),
+        MigrateDestinationNode::getKeySchema()
+      );
+    
+    $this->addFieldMapping('nid', 'id');
+    $this->addFieldMapping('is_new')->defaultValue(TRUE);
+    $this->addFieldMapping('created', 'pubdate');
+    $this->addFieldMapping('changed', 'pubdate');
+    $this->addFieldMapping('title', 'title');
+    $this->addFieldMapping('body', 'text')->arguments(array('format' => 'full_html'));
+  
+    // Unmapped source fields
+     $this->addFieldMapping(NULL, 'supplement')->issueGroup('DNM');  
+     $this->addFieldMapping(NULL, 'description')->issueGroup('DNM');  
+     $this->addFieldMapping(NULL, 'author_alias')->issueGroup('DNM');  
+     $this->addFieldMapping(NULL, 'publisher_id')->issueGroup('DNM');  
+     $this->addFieldMapping(NULL, 'paywall')->issueGroup('DNM');  
+ 
+    // Unmapped destination fields
+     $this->addFieldMapping('vid')->issueGroup('DNM');  
+     $this->addFieldMapping('type')->issueGroup('DNM');  
+     $this->addFieldMapping('language')->issueGroup('DNM');  
+     $this->addFieldMapping('uid')->issueGroup('DNM');  
+     $this->addFieldMapping('status')->issueGroup('DNM');  
+     $this->addFieldMapping('comment')->issueGroup('DNM');
+     $this->addFieldMapping('promote')->issueGroup('DNM');
+     $this->addFieldMapping('sticky')->issueGroup('DNM');
+     $this->addFieldMapping('tnid')->issueGroup('DNM');
+     $this->addFieldMapping('translate')->issueGroup('DNM');
+ 
+  }
+  
+  function csvcolumns() {
+    // id;pubdate;title;supplement;description;text;author_alias;publisher_id;paywall
+    $columns[0] = array('id', '');
+    $columns[1] = array('pubdate', '');
+    $columns[2] = array('title', '');
+    $columns[3] = array('supplement', '?');
+    $columns[4] = array('description', '');
+    $columns[5] = array('text', '');
+    $columns[6] = array('author_alias', '');
+    $columns[7] = array('publisher_id', '?');
+    $columns[8] = array('paywall', '?');
+    return $columns;
+  }     
+}
+
+
+class OLCommentMigration extends Migration {
+  public function __construct() {
+       
+    parent::__construct();
+
+    $this->dependencies = array('OLArticle');
+  
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->destination = new MigrateDestinationComment('comment_node_article');
+ 
+    $this->map = new MigrateSQLMap($this->machineName,
+        array(
+          'id' => array('type' => 'int',
+                        'unsigned' => TRUE,
+                        'not null' => TRUE,
+                        )
+        ),
+        MigrateDestinationComment::getKeySchema()
+      );
+ 
+  //  $this->addFieldMapping('cid', 'id');  
+    $this->addFieldMapping('nid')->defaultValue(421892);
+    $this->addFieldMapping('subject', 'title');
+    $this->addFieldMapping('hostname', 'ip');
+    $this->addFieldMapping('created', 'created');
+    $this->addFieldMapping('changed', 'created');
+    $this->addFieldMapping('name', 'author_alias');
+    $this->addFieldMapping('mail', 'email');
+    $this->addFieldMapping('comment_body', 'text')->arguments(array('format' => 'full_html'));
+
+    // Unmapped source fields
+    $this->addFieldMapping(NULL, 'show_email')->issueGroup('DNM');  
+    $this->addFieldMapping(NULL, 'subtopics_id')->issueGroup('DNM');  
+    $this->addFieldMapping(NULL, 'messages_id')->issueGroup('DNM');  
+    $this->addFieldMapping(NULL, 'flame')->issueGroup('DNM');  
+    $this->addFieldMapping(NULL, 'step')->issueGroup('DNM');  
+    $this->addFieldMapping(NULL, 'answer')->issueGroup('DNM');  
+
+    // Unmapped destination fields
+    $this->addFieldMapping('pid')->issueGroup('DNM');  
+    $this->addFieldMapping('uid')->issueGroup('DNM');  
+    $this->addFieldMapping('status')->issueGroup('DNM');  
+    $this->addFieldMapping('thread')->issueGroup('DNM');  
+    $this->addFieldMapping('homepage')->issueGroup('DNM');  
+    $this->addFieldMapping('language')->issueGroup('DNM');  
+    
+  }
+  
+  function csvcolumns() {
+    // id;title;text;created;author_alias;email;show_email;subtopics_id;messages_id;ip;flame;step;answer
+    $columns[0] = array('id', '');
+    $columns[1] = array('title', '');
+    $columns[2] = array('text', '');
+    $columns[3] = array('created', '');
+    $columns[4] = array('author_alias', '');
+    $columns[5] = array('email', '');
+    $columns[6] = array('show_email', '');
+    $columns[7] = array('subtopics_id', '');
+    $columns[8] = array('messages_id', '');
+    $columns[9] = array('ip', '');
+    $columns[10] = array('flame', '');
+    $columns[11] = array('step', '');
+    $columns[12] = array('answer', '');
+    return $columns;
+  }     
+
+  public function prepareRow($row) { 
+  }
+}
