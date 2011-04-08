@@ -52,7 +52,6 @@ class OLArticleMigration extends Migration {
      $this->addFieldMapping('sticky')->issueGroup('DNM');
      $this->addFieldMapping('tnid')->issueGroup('DNM');
      $this->addFieldMapping('translate')->issueGroup('DNM');
- 
   }
   
   function csvcolumns() {
@@ -137,8 +136,6 @@ class OLCommentMigration extends Migration {
     return $columns;
   }     
 
-  public function prepareRow($row) { 
-  }
 }
 
 
