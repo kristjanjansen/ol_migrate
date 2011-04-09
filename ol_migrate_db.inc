@@ -123,7 +123,19 @@ class OLCommentDBMigration extends Migration {
     $this->addFieldMapping('language')->issueGroup('DNM');  
     
   }
-  
+/*
+  public function prepareRow($current_row) {
+    $images = array();
+    $result = db_select('ol_article_comment', 'ol_a_c')
+      ->fields('ol_a_c', array('article_id', 'comment_id'))
+      ->condition('comment_id', $current_row->id)
+      ->execute();
+    if ($result) {
+      $row = $result[0];
+      $current_row->nid = $row->article_id;
+    }
+  }  
+*/
 }
 
 
