@@ -29,7 +29,8 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('created', 'pubdate');
     $this->addFieldMapping('changed', 'pubdate');
     $this->addFieldMapping('title', 'title');
-    $this->addFieldMapping('body', 'text')->arguments(array('format' => 'full_html'));
+    $this->addFieldMapping('field_description', 'description');
+    $this->addFieldMapping('field_text', 'text')->arguments(array('format' => 'full_html'));
 
     $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, '|');
     $this->addFieldMapping('field_image', 'images')
