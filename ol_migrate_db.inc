@@ -64,7 +64,7 @@ class OLArticleDBMigration extends Migration {
       ->execute();
     if ($result) {
       foreach ($result as $row) {      
-        $images[] = basename($row->url) . '|' . $row->caption . '(' . ucwords(strtolower($row->author_alias)). ')|' . $row->alt;
+        $images[] = 'x-' . basename($row->url) . '|' . $row->caption . '(' . ucwords(strtolower($row->author_alias)). ')|' . $row->alt;
       }    
       $current_row->images = implode('#', $images);
     }
