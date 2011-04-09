@@ -1,0 +1,113 @@
+<?php 
+
+function ol_migrate_schema() {
+  $schema['ol_article'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'pubdate' => array(
+        'type' => 'text',
+        'size' => 'normal',        
+      ),
+      'title' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'supplement' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),    
+      'description' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),    
+      'text' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),    
+      'author_alias' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'publisher_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),  
+      'paywall' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+    ),  
+    ),
+  );
+  
+$schema['ol_comment'] = array(
+  'fields' => array(
+    'id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'title' => array(
+      'type' => 'text',
+      'size' => 'normal',        
+    ),
+    'text' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),
+    'created' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),    
+    'author_alias' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),    
+    'email' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),    
+    'show_email' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'subtopics_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),  
+    'messages_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      ),
+    'ip' => array(
+      'type' => 'text',
+      'size' => 'normal',        
+    ),
+    'flame' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'step' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      ),  
+    'answer' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    ),
+);  
+  
+  return $schema;
+}
