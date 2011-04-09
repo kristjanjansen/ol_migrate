@@ -108,6 +108,60 @@ $schema['ol_comment'] = array(
     ),
     ),
 );  
-  
+
+$schema['ol_image'] = array(
+  'fields' => array(
+    'id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'article_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'caption' => array(
+      'type' => 'text',
+      'size' => 'normal',        
+    ),
+    'alt' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),
+    'url' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),    
+    'author_alias' => array(
+      'type' => 'text',
+      'size' => 'normal',
+    ),    
+    'contenttype_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'imagetype_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),  
+    'ordering' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      ),
+    'x_width' => array(
+      'type' => 'text',
+      'size' => 'normal',        
+    ),
+    'x_height' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    ),
+);  
   return $schema;
 }

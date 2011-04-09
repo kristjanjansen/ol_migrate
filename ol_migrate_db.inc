@@ -62,7 +62,7 @@ class OLCommentDBMigration extends Migration {
     parent::__construct();
  
     $query = db_select('ol_comment', 'ol_c')
-             ->fields('ol_a', array('id', 'title', 'text', 'created', 'author_alias', 'email', 'show_email', 'subtopics_id', 'messages_id', 'ip', 'flame', 'step', 'answer'));
+             ->fields('ol_c', array('id', 'title', 'text', 'created', 'author_alias', 'email', 'show_email', 'subtopics_id', 'messages_id', 'ip', 'flame', 'step', 'answer'));
 
     $this->source = new MigrateSourceSQL($query);
     $this->destination = new MigrateDestinationComment('comment_node_article');
@@ -106,6 +106,5 @@ class OLCommentDBMigration extends Migration {
   }
   
 }
-
 
 

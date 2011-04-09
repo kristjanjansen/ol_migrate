@@ -88,3 +88,48 @@ class OLCommentCSVMigration extends Migration {
     return $columns;
   }
 }
+
+class OLImageCSVMigration extends Migration {
+  public function __construct() {
+
+    $this->dependencies = array('OLArticleCSV');
+
+    parent::__construct();
+    $destination_key = array(
+      'id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    );
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/image.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->destination = new MigrateDestinationTableCopy('ol_image', $destination_key);
+
+    $this->map = new MigrateSQLMap($this->machineName,
+    array(
+      'id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+       )
+    ),
+    $destination_key
+    );
+  }
+
+  function csvcolumns() {
+    // id;article_id;caption;alt;url;author_alias;contenttype_id;imagetype_id;ordering;x_width;x_height
+    $columns[0] = array('id', '');
+    $columns[1] = array('article_id', '');
+    $columns[2] = array('caption', '');
+    $columns[3] = array('alt', '');
+    $columns[4] = array('url', '');
+    $columns[5] = array('author_alias', '');
+    $columns[6] = array('contenttype_id', '');
+    $columns[7] = array('imagetype_id', '');
+    $columns[8] = array('ordering', '');
+    $columns[9] = array('x_width', '');
+    $columns[10] = array('x_height', '');
+    return $columns;
+  }
+}
