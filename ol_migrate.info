@@ -4,3 +4,5 @@ package = "OL"
 core = 7.x
 dependencies[] = migrate
 files[] = ol_migrate.module
+files[] = ol_migrate_csv.inc
+files[] = ol_migrate_db.inc
