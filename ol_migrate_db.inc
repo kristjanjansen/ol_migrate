@@ -3,7 +3,7 @@
 class OLArticleDBMigration extends Migration {
   public function __construct() {
 
-    $this->dependencies = array('OLArticleCSV');
+    $this->dependencies = array('OLImageCSV');
 
     parent::__construct();
     
@@ -30,7 +30,12 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('changed', 'pubdate');
     $this->addFieldMapping('title', 'title');
     $this->addFieldMapping('body', 'text')->arguments(array('format' => 'full_html'));
-  
+
+    $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, '|');
+    $this->addFieldMapping('field_image', 'images')
+      ->separator('#')
+      ->arguments($associated_file_arguments);
+        
     // Unmapped source fields
      $this->addFieldMapping(NULL, 'supplement')->issueGroup('DNM');  
      $this->addFieldMapping(NULL, 'description')->issueGroup('DNM');  
@@ -50,7 +55,22 @@ class OLArticleDBMigration extends Migration {
      $this->addFieldMapping('tnid')->issueGroup('DNM');
      $this->addFieldMapping('translate')->issueGroup('DNM');
   }
-      
+
+  public function prepareRow($current_row) {
+    $images = array();
+    $result = db_select('ol_image', 'ol_i')
+      ->fields('ol_i', array('id', 'article_id', 'caption', 'alt', 'url', 'author_alias', 'contenttype_id', 'imagetype_id', 'ordering', 'x_width', 'x_height'))
+      ->condition('article_id', $current_row->id)
+      ->execute();
+    if ($result) {
+      foreach ($result as $row) {      
+        $images[] = basename($row->url) . '|' . $row->caption. '|' . $row->alt;
+      }
+    
+      $current_row->images = implode('#', $images);
+    }
+  }
+
 }
 
 
