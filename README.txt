@@ -24,5 +24,5 @@ drush make ol_make/ol.make ol_webroot
 cd ol_webroot
 drush site-install minimal --db-url=mysql://username:password@localhost:port/dbname -y
 drush pm-enable seven ol_features -y
-drush vset admin_theme seven y
+drush vset admin_theme seven -y
 drush migrate-import --all
