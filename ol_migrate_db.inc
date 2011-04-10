@@ -4,6 +4,7 @@ class OLArticleDBMigration extends Migration {
   public function __construct() {
 
     $this->dependencies = array('OLImageCSV');
+    $this->dependencies = array('OLImageDB');
 
     parent::__construct();
     
@@ -32,16 +33,15 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('field_description', 'description');
     $this->addFieldMapping('field_text', 'text')->arguments(array('format' => 'full_html'));
 
-    if (module_exists('node_reference')) {
-      $this->addFieldMapping('field_related_article', 'related_article')
-      ->separator('|');
-    }
+    $this->addFieldMapping('field_related_article', 'related_article')->separator('|');
+    $this->addFieldMapping('field_related_image', 'related_image')->separator('|');
 
+/*
     $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, ';');
     $this->addFieldMapping('field_image', 'images')
       ->separator('|')
       ->arguments($associated_file_arguments);
-
+*/
           
     // Unmapped source fields
      $this->addFieldMapping(NULL, 'supplement')->issueGroup('DNM');  
@@ -64,7 +64,8 @@ class OLArticleDBMigration extends Migration {
   }
 
   public function prepareRow($current_row) {
-  
+
+/*  
     // Get related images
     $images = array();
     $result = db_select('ol_image', 'ol_i')
@@ -77,7 +78,23 @@ class OLArticleDBMigration extends Migration {
       }    
       $current_row->images = implode('|', $images);
     }
-  
+ */ 
+ 
+ // Get related images
+
+ $images = array();
+   $result = db_select('ol_image', 'ol_i')
+     ->fields('ol_i', array('id', 'article_id', 'caption', 'alt', 'author_alias', 'contenttype_id', 'imagetype_id', 'ordering', 'x_width', 'x_height'))
+     ->condition('article_id', $current_row->id)
+     ->execute();
+   if ($result) {
+     foreach ($result as $row) {      
+       $images[] = '100' . $row->id;
+     }    
+     $current_row->related_image = implode('|', $images);
+   }
+
+ 
     // Get related articles
     $articles = array();
       $result = db_select('ol_article_article', 'ol_a_a')
@@ -164,4 +181,48 @@ class OLCommentDBMigration extends Migration {
 
 }
 
+
+class OLImageDBMigration extends Migration {
+  public function __construct() {
+
+    $this->dependencies = array('OLImageCSV');
+
+    parent::__construct();
+   
+    $query = db_select('ol_image', 'ol_i')
+             ->fields('ol_i', array('id', 'article_id', 'caption', 'alt', 'url', 'author_alias', 'contenttype_id', 'imagetype_id', 'ordering', 'x_width', 'x_height'));
+
+    $this->source = new MigrateSourceSQL($query);
+             
+    $this->destination = new MigrateDestinationNode('image');
+ 
+    $this->map = new MigrateSQLMap($this->machineName,
+        array(
+          'id' => array('type' => 'int',
+                        'unsigned' => TRUE,
+                        'not null' => TRUE,
+                        )
+        ),
+        MigrateDestinationNode::getKeySchema()
+      );
+    
+    $this->addFieldMapping('nid', 'id');
+    $this->addFieldMapping('is_new')->defaultValue(TRUE);
+    $this->addFieldMapping('title', 'id');
+
+    $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, ';');
+    $this->addFieldMapping('field_image', 'image')
+      ->separator('|')
+      ->arguments($associated_file_arguments);
+
+  }
+
+  public function prepareRow($current_row) {
+  
+    $current_row->image = 'x-' . basename($current_row->url);
+    $current_row->id = '100' . $current_row->id;
+  
+  }
+
+}
 
