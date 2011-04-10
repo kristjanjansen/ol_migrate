@@ -31,12 +31,18 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('title', 'title');
     $this->addFieldMapping('field_description', 'description');
     $this->addFieldMapping('field_text', 'text')->arguments(array('format' => 'full_html'));
-
-    $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, '|');
+/*
+    if (module_exists('node_reference')) {
+      $this->addFieldMapping('field_reference_article', 'reference_article')
+      ->separator('|');
+    }
+*/
+    $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, ';');
     $this->addFieldMapping('field_image', 'images')
-      ->separator('#')
+      ->separator('|')
       ->arguments($associated_file_arguments);
-        
+
+          
     // Unmapped source fields
      $this->addFieldMapping(NULL, 'supplement')->issueGroup('DNM');  
      $this->addFieldMapping(NULL, 'description')->issueGroup('DNM');  
@@ -58,6 +64,8 @@ class OLArticleDBMigration extends Migration {
   }
 
   public function prepareRow($current_row) {
+  
+    // Get related images
     $images = array();
     $result = db_select('ol_image', 'ol_i')
       ->fields('ol_i', array('id', 'article_id', 'caption', 'alt', 'url', 'author_alias', 'contenttype_id', 'imagetype_id', 'ordering', 'x_width', 'x_height'))
@@ -65,10 +73,25 @@ class OLArticleDBMigration extends Migration {
       ->execute();
     if ($result) {
       foreach ($result as $row) {      
-        $images[] = 'x-' . basename($row->url) . '|' . $row->caption . '(' . ucwords(strtolower($row->author_alias)). ')|' . $row->alt;
+        $images[] = 'x-' . basename($row->url) . ';' . $row->caption . '(' . ucwords(strtolower($row->author_alias)). ');' . $row->alt;
       }    
-      $current_row->images = implode('#', $images);
+      $current_row->images = implode('|', $images);
     }
+/*  
+    // Get related articles
+    $articles = array();
+      $result = db_select('ol_article_article', 'ol_a_a')
+        ->fields('ol_a_a', array('article_id_1', 'article_id_2'))
+        ->condition('article_id_1', $current_row->id)
+        ->execute();
+      if ($result) {
+        foreach ($result as $row) {      
+          $articles[] = $row->article_id_2
+        }    
+        $current_row->reference_article = implode('|', $articles);
+      }
+*/  
+  
   }
 
 }
@@ -126,7 +149,7 @@ class OLCommentDBMigration extends Migration {
   }
 /*
   public function prepareRow($current_row) {
-    $images = array();
+    // Get article ID for comment
     $result = db_select('ol_article_comment', 'ol_a_c')
       ->fields('ol_a_c', array('article_id', 'comment_id'))
       ->condition('comment_id', $current_row->id)

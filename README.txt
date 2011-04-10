@@ -13,15 +13,15 @@ Migration stages:
 Requirements for Windows:
 
 drush is installed http://drupal.org/node/594744
+drush make is installed: drush dl drush_make
 git is installed http://code.google.com/p/msysgit
 some kind of LAMP stack is available
 
 Usage:
 
-drush dl drupal --drupal-project-rename=ohtuleht -y
-cd ohtuleht
-drush si --db-url=mysql://your_username:your_password@localhost:port/your_dbname -y
-drush dl migrate
-git clone https://github.com/kristjanjansen/ol_migrate.git sites/all/modules/ol_migrate
-drush en ol_migrate -y
-drush mi --all
+git clone https://github.com/kristjanjansen/ol_make.git
+drush make ol_make/ol.make ol_webroot
+cd ol_webroot
+drush site-install minimal --db-url=mysql://username:password@localhost:port/dbname -y
+drush pm-enable seven ol_features -y
+drush migrate-import --all
