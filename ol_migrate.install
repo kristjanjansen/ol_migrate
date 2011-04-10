@@ -183,5 +183,20 @@ $schema['ol_article_article'] = array(
   ),
   ),
 );
+
+$schema['ol_article_comment'] = array(
+  'fields' => array(
+    'article_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'comment_id' => array(
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+  ),
+  ),
+);
   return $schema;
 }

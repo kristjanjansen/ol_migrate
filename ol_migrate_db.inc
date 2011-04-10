@@ -120,8 +120,8 @@ class OLCommentDBMigration extends Migration {
         MigrateDestinationComment::getKeySchema()
       );
  
-  //  $this->addFieldMapping('cid', 'id');  
-    $this->addFieldMapping('nid')->defaultValue(421892);
+//  $this->addFieldMapping('cid', 'id');  
+    $this->addFieldMapping('nid', 'nid');
     $this->addFieldMapping('subject', 'title');
     $this->addFieldMapping('hostname', 'ip');
     $this->addFieldMapping('created', 'created');
@@ -147,7 +147,7 @@ class OLCommentDBMigration extends Migration {
     $this->addFieldMapping('language')->issueGroup('DNM');  
     
   }
-/*
+
   public function prepareRow($current_row) {
     // Get article ID for comment
     $result = db_select('ol_article_comment', 'ol_a_c')
@@ -155,11 +155,13 @@ class OLCommentDBMigration extends Migration {
       ->condition('comment_id', $current_row->id)
       ->execute();
     if ($result) {
-      $row = $result[0];
-      $current_row->nid = $row->article_id;
+      foreach ($result as $row) {      
+        $current_row->nid = $row->article_id;
+      }
     }
   }  
-*/
+
+
 }
 
 
