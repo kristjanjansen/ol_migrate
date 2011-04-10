@@ -31,12 +31,12 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('title', 'title');
     $this->addFieldMapping('field_description', 'description');
     $this->addFieldMapping('field_text', 'text')->arguments(array('format' => 'full_html'));
-/*
+
     if (module_exists('node_reference')) {
-      $this->addFieldMapping('field_reference_article', 'reference_article')
+      $this->addFieldMapping('field_related_article', 'related_article')
       ->separator('|');
     }
-*/
+
     $associated_file_arguments = MigrateFileFieldHandler::arguments(drupal_get_path('module', 'ol_migrate') . '/data/' , 'file_copy', FILE_EXISTS_RENAME, NULL, 2, 1, NULL, NULL, ';');
     $this->addFieldMapping('field_image', 'images')
       ->separator('|')
@@ -77,20 +77,20 @@ class OLArticleDBMigration extends Migration {
       }    
       $current_row->images = implode('|', $images);
     }
-/*  
+  
     // Get related articles
     $articles = array();
       $result = db_select('ol_article_article', 'ol_a_a')
-        ->fields('ol_a_a', array('article_id_1', 'article_id_2'))
+        ->fields('ol_a_a', array('id', 'article_id_1', 'article_id_2'))
         ->condition('article_id_1', $current_row->id)
         ->execute();
       if ($result) {
         foreach ($result as $row) {      
-          $articles[] = $row->article_id_2
+          $articles[] = $row->article_id_2;
         }    
-        $current_row->reference_article = implode('|', $articles);
+        $current_row->related_article = implode('|', $articles);
       }
-*/  
+  
   
   }
 
