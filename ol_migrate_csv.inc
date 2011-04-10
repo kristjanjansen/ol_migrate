@@ -133,3 +133,37 @@ class OLImageCSVMigration extends Migration {
     return $columns;
   }
 }
+
+class OLArticleArticleCSVMigration extends Migration {
+  public function __construct() {
+
+    parent::__construct();
+    $destination_key = array(
+      'id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    );
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/article_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->destination = new MigrateDestinationTableCopy('ol_article_article', $destination_key);
+
+    $this->map = new MigrateSQLMap($this->machineName,
+    array(
+      'id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+       ),
+    ),
+    $destination_key
+    );
+  }
+
+  function csvcolumns() {
+    $columns[0] = array('id', '');
+    $columns[1] = array('article_id_1', '');
+    $columns[2] = array('article_id_2', '');
+    return $columns;
+  }
+}
