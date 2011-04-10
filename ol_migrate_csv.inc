@@ -11,7 +11,7 @@ class OLArticleCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/article.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
     $this->destination = new MigrateDestinationTableCopy('ol_article', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
@@ -55,7 +55,7 @@ class OLCommentCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
     $this->destination = new MigrateDestinationTableCopy('ol_comment', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
@@ -102,7 +102,7 @@ class OLImageCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/image.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_image.csv', $this->csvcolumns(), array('delimiter' => ';'));
     $this->destination = new MigrateDestinationTableCopy('ol_image', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
@@ -145,7 +145,7 @@ class OLArticleArticleCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/article_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_article_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
     $this->destination = new MigrateDestinationTableCopy('ol_article_article', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
@@ -179,7 +179,7 @@ class OLArticleCommentCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/article_comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_article_comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
     $this->destination = new MigrateDestinationTableCopy('ol_article_comment', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
