@@ -176,7 +176,7 @@ class OLUserDBMigration extends Migration {
     parent::__construct();
     
     $query = db_select('ol_article', 'ol_a')
-             ->fields('ol_a', array('id','author_alias'))
+             ->fields('ol_a', array('id','author_alias','text'))
              ->distinct();
              
     $this->source = new MigrateSourceSQL($query);
@@ -194,8 +194,10 @@ class OLUserDBMigration extends Migration {
             'type' => 'text'
           )
         ),
-        MigrateDestinationNode::getKeySchema()
+        MigrateDestinationUser::getKeySchema()
       );
+      
+    
     
     $this->addFieldMapping('name', 'author_alias');
   }
