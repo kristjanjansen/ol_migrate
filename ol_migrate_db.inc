@@ -170,15 +170,14 @@ class OLCommentDBMigration extends Migration {
 
 class OLUserDBMigration extends Migration {
 
-  public static $users = array();
+  public static $authors = array();
 
   public function __construct() {
+    
     $this->dependencies = array('OLArticleCSV');
-
 
     parent::__construct();
     
-
     $result = db_select('ol_article', 'ol_a')
              ->fields('ol_a', array('author_alias'))
              ->distinct()
@@ -212,10 +211,10 @@ class OLUserDBMigration extends Migration {
   }
     
   public function prepareRow($current_row) {
-    if (in_array($current_row->author_alias, OLUserDBMigration::$users)) {
+    if (in_array($current_row->author_alias, OLUserDBMigration::$authors)) {
       return FALSE;
     } else {
-      OLUserDBMigration::$users[] = $current_row->author_alias;
+      OLUserDBMigration::$authors[] = $current_row->author_alias;
       return TRUE;
     }
   }
