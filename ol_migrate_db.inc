@@ -170,41 +170,46 @@ class OLCommentDBMigration extends Migration {
 
 class OLUserDBMigration extends Migration {
   public function __construct() {
-
     $this->dependencies = array('OLArticleCSV');
 
     parent::__construct();
     
+
+    $result = db_select('ol_article', 'ol_a')
+             ->fields('ol_a', array('author_alias'))
+             ->distinct()
+             ->execute();
+    if ($result) {
+      foreach ($result as $row) {      
+        print_r($row->author_alias);
+      }
+    }
+    
     $query = db_select('ol_article', 'ol_a')
-             ->fields('ol_a', array('id','author_alias','text'))
+             ->fields('ol_a', array('author_alias', 'id'))
+             ->condition('author_alias', '', '<>')
              ->distinct();
-             
+
     $this->source = new MigrateSourceSQL($query);
              
     $this->destination = new MigrateDestinationUser();
  
     $this->map = new MigrateSQLMap($this->machineName,
         array(
-          'id' => array(
+         'id' => array(
             'type' => 'int',
             'unsigned' => TRUE,
             'not null' => TRUE,
           ),
-          'author_alias' => array(
-            'type' => 'text'
-          )
         ),
         MigrateDestinationUser::getKeySchema()
       );
       
     
-    
-    $this->addFieldMapping('name', 'author_alias');
+    $this->addFieldMapping('name', 'author_alias')->dedupe('users','name')->defaultValue(NULL);
   }
 
   public function prepareRow($current_row) {
-  
-    
   
   }
 
