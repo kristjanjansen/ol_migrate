@@ -28,9 +28,13 @@ class OLArticleDBMigration extends Migration {
     $this->addFieldMapping('is_new')->defaultValue(TRUE);
     $this->addFieldMapping('created', 'pubdate');
     $this->addFieldMapping('changed', 'pubdate');
-    $this->addFieldMapping('title', 'title');
-    $this->addFieldMapping('field_description', 'description');
+    $this->addFieldMapping('title', 'title_stripped');
+    $this->addFieldMapping('field_title', 'title')->arguments(array('format' => 'full_html'));
+    $this->addFieldMapping('supplement', 'supplement')->arguments(array('format' => 'full_html'));
+    $this->addFieldMapping('field_description', 'description')->arguments(array('format' => 'full_html'));
     $this->addFieldMapping('field_text', 'text')->arguments(array('format' => 'full_html'));
+    $this->addFieldMapping('field_publisher', 'publisher_id');
+    $this->addFieldMapping('field_paywall', 'paywall');
 
     if (module_exists('node_reference')) {
       $this->addFieldMapping('field_related_article', 'related_article')
@@ -44,11 +48,7 @@ class OLArticleDBMigration extends Migration {
 
           
     // Unmapped source fields
-     $this->addFieldMapping(NULL, 'supplement')->issueGroup('DNM');  
-     $this->addFieldMapping(NULL, 'description')->issueGroup('DNM');  
      $this->addFieldMapping(NULL, 'author_alias')->issueGroup('DNM');  
-     $this->addFieldMapping(NULL, 'publisher_id')->issueGroup('DNM');  
-     $this->addFieldMapping(NULL, 'paywall')->issueGroup('DNM');  
  
     // Unmapped destination fields
      $this->addFieldMapping('vid')->issueGroup('DNM');  
@@ -65,6 +65,10 @@ class OLArticleDBMigration extends Migration {
 
   public function prepareRow($current_row) {
   
+    // Title mapping does not seem to accept text format parameter
+    // so we need to create a temporary value 
+    $current_row->title_stripped = strip_tags($current_row->title);
+    
     // Get related images
     $images = array();
     $result = db_select('ol_image', 'ol_i')
