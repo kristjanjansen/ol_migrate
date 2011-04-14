@@ -169,8 +169,12 @@ class OLCommentDBMigration extends Migration {
 }
 
 class OLUserDBMigration extends Migration {
+
+  public static $users = array();
+
   public function __construct() {
     $this->dependencies = array('OLArticleCSV');
+
 
     parent::__construct();
     
@@ -187,8 +191,7 @@ class OLUserDBMigration extends Migration {
     
     $query = db_select('ol_article', 'ol_a')
              ->fields('ol_a', array('author_alias', 'id'))
-             ->condition('author_alias', '', '<>')
-             ->distinct();
+             ->condition('author_alias', '', '<>');
 
     $this->source = new MigrateSourceSQL($query);
              
@@ -204,27 +207,18 @@ class OLUserDBMigration extends Migration {
         ),
         MigrateDestinationUser::getKeySchema()
       );
-      
-    
+        
     $this->addFieldMapping('name', 'author_alias')->dedupe('users','name')->defaultValue(NULL);
   }
-/*
+    
   public function prepareRow($current_row) {
- 
-    $ret = TRUE; 
-    $result =  db_select('ol_article', 'ol_a')
-             ->fields('ol_a', array('author_alias'))
-             ->execute();
-    if ($result) {
-      foreach ($result as $row) { 
-        if (trim($current_row->author_alias) == trim($row->author_alias)) {
-          $ret = FALSE;
-        }
-      } 
+    if (in_array($current_row->author_alias, OLUserDBMigration::$users)) {
+      return FALSE;
+    } else {
+      OLUserDBMigration::$users[] = $current_row->author_alias;
+      return TRUE;
     }
-    return $ret;
-
   }
-*/
+
 }
 
