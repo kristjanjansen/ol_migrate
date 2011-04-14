@@ -84,13 +84,13 @@ class OLArticleDBMigration extends Migration {
   
     // Get related articles
     $articles = array();
-      $result = db_select('ol_article_article', 'ol_a_a')
-        ->fields('ol_a_a', array('id', 'article_id_1', 'article_id_2'))
-        ->condition('article_id_1', $current_row->id)
+      $result = db_select('ol_related_article', 'ol_r_a')
+        ->fields('ol_r_a', array('id', 'article_id', 'related_article_id', 'front'))
+        ->condition('article_id', $current_row->id)
         ->execute();
       if ($result) {
         foreach ($result as $row) {      
-          $articles[] = $row->article_id_2;
+          $articles[] = $row->related_article_id;
         }    
         $current_row->related_article = implode('|', $articles);
       }

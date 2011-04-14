@@ -134,7 +134,7 @@ class OLImageCSVMigration extends Migration {
   }
 }
 
-class OLArticleArticleCSVMigration extends Migration {
+class OLRelatedArticleCSVMigration extends Migration {
   public function __construct() {
 
     parent::__construct();
@@ -145,8 +145,8 @@ class OLArticleArticleCSVMigration extends Migration {
         'not null' => TRUE,
       ),
     );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_article_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
-    $this->destination = new MigrateDestinationTableCopy('ol_article_article', $destination_key);
+    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_related_article.csv', $this->csvcolumns(), array('delimiter' => ';'));
+    $this->destination = new MigrateDestinationTableCopy('ol_related_article', $destination_key);
 
     $this->map = new MigrateSQLMap($this->machineName,
     array(
@@ -162,8 +162,9 @@ class OLArticleArticleCSVMigration extends Migration {
 
   function csvcolumns() {
     $columns[0] = array('id', '');
-    $columns[1] = array('article_id_1', '');
-    $columns[2] = array('article_id_2', '');
+    $columns[1] = array('article_id', '');
+    $columns[2] = array('related_article_id', '');
+    $columns[3] = array('front', '');
     return $columns;
   }
 }
