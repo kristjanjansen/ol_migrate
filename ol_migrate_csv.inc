@@ -168,7 +168,7 @@ class OLRelatedArticleCSVMigration extends Migration {
     return $columns;
   }
 }
-
+/*
 class OLArticleCommentCSVMigration extends Migration {
   public function __construct() {
 
@@ -201,7 +201,7 @@ class OLArticleCommentCSVMigration extends Migration {
     return $columns;
   }
 }
-
+*/
 
 class OLForumSubtopicsCSVMigration extends Migration {
 
