@@ -197,9 +197,9 @@ class OLUserDBMigration extends Migration {
     $this->map = new MigrateSQLMap($this->machineName,
         array(
          'id' => array(
-            'type' => 'int',
-            'unsigned' => TRUE,
-            'not null' => TRUE,
+           'type' => 'int',
+           'unsigned' => TRUE,
+           'not null' => TRUE,
           ),
         ),
         MigrateDestinationUser::getKeySchema()
@@ -208,10 +208,23 @@ class OLUserDBMigration extends Migration {
     
     $this->addFieldMapping('name', 'author_alias')->dedupe('users','name')->defaultValue(NULL);
   }
-
+/*
   public function prepareRow($current_row) {
-  
-  }
+ 
+    $ret = TRUE; 
+    $result =  db_select('ol_article', 'ol_a')
+             ->fields('ol_a', array('author_alias'))
+             ->execute();
+    if ($result) {
+      foreach ($result as $row) { 
+        if (trim($current_row->author_alias) == trim($row->author_alias)) {
+          $ret = FALSE;
+        }
+      } 
+    }
+    return $ret;
 
+  }
+*/
 }
 
