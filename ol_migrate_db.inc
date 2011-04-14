@@ -136,7 +136,7 @@ class OLCommentDBMigration extends Migration {
 
     // Unmapped source fields
     $this->addFieldMapping(NULL, 'show_email')->issueGroup('DNM');  
-    $this->addFieldMapping(NULL, 'subtopics_id')->issueGroup('DNM');  
+    // $this->addFieldMapping(NULL, 'subtopics_id')->issueGroup('DNM');  
     $this->addFieldMapping(NULL, 'messages_id')->issueGroup('DNM');  
     $this->addFieldMapping(NULL, 'flame')->issueGroup('DNM');  
     $this->addFieldMapping(NULL, 'step')->issueGroup('DNM');  
@@ -154,9 +154,9 @@ class OLCommentDBMigration extends Migration {
 
   public function prepareRow($current_row) {
     // Get article ID for comment
-    $result = db_select('ol_article_comment', 'ol_a_c')
-      ->fields('ol_a_c', array('article_id', 'comment_id'))
-      ->condition('comment_id', $current_row->id)
+    $result = db_select('ol_forum_subtopics', 'ol_f_s')
+      ->fields('ol_f_s', array('article_id'))
+      ->condition('id', $current_row->subtopics_id)
       ->execute();
     if ($result) {
       foreach ($result as $row) {      
