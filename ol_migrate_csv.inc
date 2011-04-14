@@ -169,40 +169,6 @@ class OLRelatedArticleCSVMigration extends Migration {
   }
 }
 
-class OLArticleCommentCSVMigration extends Migration {
-  public function __construct() {
-
-    parent::__construct();
-    $destination_key = array(
-      'comment_id' => array(
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-    );
-    $this->source = new MigrateSourceCSV(drupal_get_path('module', 'ol_migrate') . '/data/ol_article_comment.csv', $this->csvcolumns(), array('delimiter' => ';'));
-    $this->destination = new MigrateDestinationTableCopy('ol_article_comment', $destination_key);
-
-    $this->map = new MigrateSQLMap($this->machineName,
-    array(
-      'comment_id' => array(
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-       ),
-    ),
-    $destination_key
-    );
-  }
-
-  function csvcolumns() {
-    $columns[0] = array('article_id', '');
-    $columns[1] = array('comment_id', '');
-    return $columns;
-  }
-}
-
-
 class OLForumSubtopicsCSVMigration extends Migration {
 
   public function __construct() {
