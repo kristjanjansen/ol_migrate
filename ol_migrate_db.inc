@@ -4,6 +4,7 @@ class OLArticleDBMigration extends Migration {
   public function __construct() {
 
     $this->dependencies = array('OLImageCSV');
+    $this->dependencies = array('OLUserDB');
 
     parent::__construct();
     
@@ -26,6 +27,7 @@ class OLArticleDBMigration extends Migration {
     
     $this->addFieldMapping('nid', 'id');
     $this->addFieldMapping('is_new')->defaultValue(TRUE);
+    $this->addFieldMapping('uid', 'uid');
     $this->addFieldMapping('created', 'pubdate');
     $this->addFieldMapping('changed', 'pubdate');
     $this->addFieldMapping('title', 'title_stripped');
@@ -95,6 +97,18 @@ class OLArticleDBMigration extends Migration {
         $current_row->related_article = implode('|', $articles);
       }
   
+
+      $images = array();
+      $result = db_select('users', 'u')
+        ->fields('u', array('uid', 'name'))
+        ->condition('name', ol_migrate_author_clean($current_row->author_alias))
+        ->distinct()
+        ->execute();
+      if ($result) {
+        foreach ($result as $row) {      
+          $current_row->uid = $row->uid;
+        }    
+      }
   
   }
 
@@ -217,8 +231,7 @@ class OLUserDBMigration extends Migration {
     if (in_array($current_row->author_alias, OLUserDBMigration::$authors)) {
       return FALSE;
     } else {
-      OLUserDBMigration::$authors[] = $current_row->author_alias;
-      
+      OLUserDBMigration::$authors[] = $current_row->author_alias;     
       return TRUE;
     }
   }
@@ -229,7 +242,6 @@ function ol_migrate_author_clean($author_alias) {
   if ($author_alias) {
     $author_parts = explode(' ', $author_alias);
     array_walk($author_parts, 'trim');
-  //  print_r($author_parts);
     if ($author_parts[0] == 'Toimetas') {
       unset($author_parts[0]);
     }
