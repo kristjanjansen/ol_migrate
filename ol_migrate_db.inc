@@ -27,7 +27,7 @@ class OLArticleDBMigration extends Migration {
     
     $this->addFieldMapping('nid', 'id');
     $this->addFieldMapping('is_new')->defaultValue(TRUE);
-    $this->addFieldMapping('uid', 'uid');
+    $this->addFieldMapping('uid', 'uid')->defaultValue(1);
     $this->addFieldMapping('created', 'pubdate');
     $this->addFieldMapping('changed', 'pubdate');
     $this->addFieldMapping('title', 'title_stripped');
@@ -50,13 +50,11 @@ class OLArticleDBMigration extends Migration {
 
           
     // Unmapped source fields
-     $this->addFieldMapping(NULL, 'author_alias')->issueGroup('DNM');  
  
     // Unmapped destination fields
      $this->addFieldMapping('vid')->issueGroup('DNM');  
      $this->addFieldMapping('type')->issueGroup('DNM');  
      $this->addFieldMapping('language')->issueGroup('DNM');  
-     $this->addFieldMapping('uid')->issueGroup('DNM');  
      $this->addFieldMapping('status')->issueGroup('DNM');  
      $this->addFieldMapping('comment')->issueGroup('DNM');
      $this->addFieldMapping('promote')->issueGroup('DNM');
