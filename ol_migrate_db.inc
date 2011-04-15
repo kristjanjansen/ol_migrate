@@ -198,11 +198,13 @@ class OLUserDBMigration extends Migration {
  
     $this->map = new MigrateSQLMap($this->machineName,
         array(
+
          'id' => array(
            'type' => 'int',
            'unsigned' => TRUE,
            'not null' => TRUE,
           ),
+
         ),
         MigrateDestinationUser::getKeySchema()
       );
@@ -211,13 +213,26 @@ class OLUserDBMigration extends Migration {
   }
     
   public function prepareRow($current_row) {
+  //  $current_row->author_alias = ol_migrate_author_clean($current_row->author_alias);
     if (in_array($current_row->author_alias, OLUserDBMigration::$authors)) {
       return FALSE;
     } else {
       OLUserDBMigration::$authors[] = $current_row->author_alias;
+      
       return TRUE;
     }
   }
 
 }
 
+function ol_migrate_author_clean($author_alias) {
+  if ($author_alias) {
+    $author_parts = explode(' ', $author_alias);
+    array_walk($author_parts, 'trim');
+  //  print_r($author_parts);
+    if ($author_parts[0] == 'Toimetas') {
+      unset($author_parts[0]);
+    }
+    return implode(' ', $author_parts);
+  }
+}

@@ -195,7 +195,6 @@ class OLForumSubtopicsCSVMigration extends Migration {
     );
   }
 
-
 function csvcolumns() {
     $columns[0] = array('id', '');
     $columns[1] = array('title', '');
