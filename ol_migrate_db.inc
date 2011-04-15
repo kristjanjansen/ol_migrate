@@ -189,17 +189,7 @@ class OLUserDBMigration extends Migration {
     $this->dependencies = array('OLArticleCSV');
 
     parent::__construct();
-    
-    $result = db_select('ol_article', 'ol_a')
-             ->fields('ol_a', array('author_alias'))
-             ->distinct()
-             ->execute();
-    if ($result) {
-      foreach ($result as $row) {      
-        print_r($row->author_alias);
-      }
-    }
-    
+        
     $query = db_select('ol_article', 'ol_a')
              ->fields('ol_a', array('author_alias', 'id'))
              ->condition('author_alias', '', '<>');
