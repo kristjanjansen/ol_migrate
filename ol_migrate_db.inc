@@ -213,7 +213,7 @@ class OLUserDBMigration extends Migration {
   }
     
   public function prepareRow($current_row) {
-  //  $current_row->author_alias = ol_migrate_author_clean($current_row->author_alias);
+    $current_row->author_alias = ol_migrate_author_clean($current_row->author_alias);
     if (in_array($current_row->author_alias, OLUserDBMigration::$authors)) {
       return FALSE;
     } else {
