@@ -20,7 +20,7 @@ Usage:
 
 drush make https://raw.github.com/kristjanjansen/ol_make/master/ol.make ol
 cd ol
-drush si minimal --db-url=mysql://your_username:your_password@localhost:port/your_databse_name -y
+drush si minimal --db-url=mysql://your_username:your_password@localhost:port/your_database_name -y
 drush en seven ol_features -y
 drush vset admin_theme seven -y
 drush mi --all
