@@ -12,17 +12,15 @@ Migration stages:
 
 Requirements for Windows:
 
-drush is installed http://drupal.org/node/594744
+drush is installed http://drupal.org/project/drush and http://drush.ws/drush_windows_installer
 drush make is installed: drush dl drush_make
-git is installed http://code.google.com/p/msysgit
 some kind of LAMP stack is available
 
 Usage:
 
-git clone https://github.com/kristjanjansen/ol_make.git
-drush make ol_make/ol.make ol
+drush make https://raw.github.com/kristjanjansen/ol_make/master/ol.make ol
 cd ol
-drush site-install minimal --db-url=mysql://username:password@localhost:port/dbname -y
-drush pm-enable seven ol_features -y
+drush si minimal --db-url=mysql://your_username:your_password@localhost:port/your_databse_name -y
+drush en seven ol_features -y
 drush vset admin_theme seven -y
-drush migrate-import --all
+drush mi --all
